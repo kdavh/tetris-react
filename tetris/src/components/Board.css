@@ -1,0 +1,28 @@
+.Board {
+  margin-top: 10px;
+  border: 1px solid black;
+  width: 302px;
+  height: 662px;
+  display: inline-block;
+}
+
+.Board-col {
+  float: left;
+}
+
+.Board-sq {
+  width: 30px;
+  height: 30px;
+}
+
+.Board-sq-active {
+  background-color: orange;
+}
+
+.Board-sq-frozen {
+  background-color: blue;
+}
+
+.Board-sq-obscured {
+  background-color: gray;
+}
