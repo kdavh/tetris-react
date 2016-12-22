@@ -1,5 +1,5 @@
 import { INITIAL_STATE } from './app';
-import { placePiece, lowerActivePiece, dropPiece, moveLeft, moveRight, rotate } from './actions';
+import { swapCurrentPiece, placePiece, lowerActivePiece, dropPiece, moveLeft, moveRight, rotate } from './actions';
 import TetrisPiece from './TetrisPiece';
 
 export default function reducer(state = INITIAL_STATE, action) {
@@ -20,6 +20,8 @@ export default function reducer(state = INITIAL_STATE, action) {
     return rotate(state, TetrisPiece.ROTATIONS.COUNTERCLOCKWISE);
   case 'TOGGLE_PAUSE':
     return state.set('paused', !state.get('paused'));
+  case 'SWAP_PIECE':
+    return swapCurrentPiece(state);
   default:
     return state;
   }

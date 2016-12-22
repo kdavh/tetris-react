@@ -29,6 +29,7 @@ class Board extends Component {
                 'Board-sq',
                 { 'Board-sq-active': TetrisSquare.ACTIVE === board[x][y].state },
                 { 'Board-sq-frozen': TetrisSquare.FROZEN === board[x][y].state },
+                { 'Board-sq-ghost': TetrisSquare.GHOST === board[x][y].state },
                 { 'Board-sq-obscured': y <= 1 }
               );
               return <div key={y} className={classes}></div>

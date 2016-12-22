@@ -10,3 +10,9 @@ But if you have npm installed directly on your system, you should just be able t
   - `npm install -g create-react-app; create-react-app tetris`
 
 - There are tests, `npm test` should do it if you're not running in docker. But the default config needs a fix when run in docker. `npm test` inside docker container (`make test` outside of container) does not work by default.  Fix by commenting out lines 25-27 of tetris/node_modules/react-scripts/scripts/test.js (removing default `--watch` argument). `--watch` triggers ENOSPC for some reason I haven't been able to figure out.
+
+
+- swap pieces
+  - if no held piece then stored and another immediately falls
+  - if swapped once, then you can't reswap with the same piece
+  - display stored piece

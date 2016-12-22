@@ -1,9 +1,9 @@
 import { Map, fromJS } from 'immutable'
 
-const TetrisPiece = (shape, center, rotation = TetrisPiece.ROTATIONS.NONE) => {
+const TetrisPiece = (shape, center, rotation = TetrisPiece.ROTATIONS.NONE, swapped = false) => {
   shape = rotateShape(shape, rotation);
 
-  return fromJS({ shape, center });
+  return fromJS({ shape, center, swapped });
 }
 
 TetrisPiece.ROTATIONS = {

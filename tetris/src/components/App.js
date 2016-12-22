@@ -78,6 +78,8 @@ class App extends Component {
         return this._dispatch({ type: "MOVE_RIGHT" });
       case "p":
         return this._dispatch({ type: "TOGGLE_PAUSE" });
+      case "c":
+        return this._dispatch({ type: "SWAP_PIECE" });
       default:
     }
   }

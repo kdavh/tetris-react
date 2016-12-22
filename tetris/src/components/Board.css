@@ -23,6 +23,10 @@
   background-color: blue;
 }
 
+.Board-sq-ghost {
+  background-color: yellow;
+}
+
 .Board-sq-obscured {
   background-color: gray;
 }

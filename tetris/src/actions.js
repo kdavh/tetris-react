@@ -1,4 +1,4 @@
-import { BOARD_HEIGHT, BOARD_WIDTH } from './app';
+import { BOARD_TOP_CENTER, BOARD_HEIGHT, BOARD_WIDTH } from './app';
 import { Range } from 'immutable'
 import TetrisBoard from './TetrisBoard';
 import TetrisSquare from './TetrisSquare';
@@ -8,7 +8,9 @@ export function placePiece(state, piece) {
   if (illegalPosition(state, piece)) {
     return state.set('over', true);
   } else {
-    return state.update(
+    var newState = ghostDropPiece(state);
+
+    return newState.update(
       'board',
       (b) => { return TetrisBoard.setSquares(b, piece, TetrisSquare.ACTIVE) }
     ).set('activePiece', piece);
@@ -79,6 +81,54 @@ export function moveRight(state) {
   return move(state, piece, TetrisPiece.moveRight(piece));
 }
 
+export function swapCurrentPiece(state) {
+  if (state.get('activePiece') && state.get('justSwapped')) return state;
+
+  if (!state.get('storedPiece')) {
+    var newState = state
+      .set('storedPiece', state.get('activePiece'))
+      .set('activePiece', null)
+  } else {
+    var newState = state
+      .set('storedPiece', state.get('activePiece'))
+      .set('activePiece', state.get('storedPiece')
+        .set('center', BOARD_TOP_CENTER)
+      )
+  }
+
+  return removePiece(newState, state.get('activePiece')).set('justSwapped', true)
+}
+
+export function eraseGhostPiece(state, piece) {
+  var newPiece = piece;
+
+  while (!illegalPosition(state, TetrisPiece.lower(newPiece))) {
+    newPiece = TetrisPiece.lower(newPiece);
+  }
+
+  return state.update(
+    'board',
+    (b) => { return TetrisBoard.setSquares(b, newPiece, TetrisSquare.EMPTY) }
+  );
+}
+
+export function ghostDropPiece(state) {
+  const piece = state.get('activePiece');
+
+  if (!piece) return state;
+
+  var newPiece = piece;
+
+  while (!illegalPosition(state, TetrisPiece.lower(newPiece))) {
+    newPiece = TetrisPiece.lower(newPiece);
+  }
+
+  return state.update(
+    'board',
+    (b) => { return TetrisBoard.setSquares(b, newPiece, TetrisSquare.GHOST) }
+  );
+}
+
 function move(state, oldPiece, newPiece) {
   if (illegalPosition(state, newPiece)) {
     return state;
@@ -89,17 +139,19 @@ function move(state, oldPiece, newPiece) {
 }
 
 function removePiece(state, piece) {
-  return state.update(
+  var newState = state.update(
     'board',
     (b) => { return TetrisBoard.setSquares(b, piece, TetrisSquare.EMPTY) }
   );
+
+  return eraseGhostPiece(newState, piece)
 }
 
 function freezePiece(state, piece) {
   var newState = state.update(
     'board',
     (b) => { return TetrisBoard.setSquares(b, piece, TetrisSquare.FROZEN) }
-  );
+  ).set('justSwapped', false);
 
   const relevantYCoords = TetrisPiece.coordsOnBoard(piece).map((coord) => {
     return coord.get('y');

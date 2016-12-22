@@ -13,5 +13,6 @@ export const INITIAL_STATE = Map({
   board: TetrisBoard(BOARD_WIDTH, BOARD_HEIGHT),
   paused: false,
   over: false,
-  score: 0
+  score: 0,
+  storedPiece: null
 });
